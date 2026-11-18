@@ -43,7 +43,7 @@
 - 素材接入：Qoder 从素材包选图、压缩并改为 ASCII 文件名；六景音频压缩为 12 段 MP3，折叠、`preload="none"`、不自动播放；后花园无音频不补造。
 - 内容边界：文化事实继续只用顺德区博物馆与佛山日报来源；音频单独标注“原始录音 · 未逐条审核”；票价、开放、通行不编数值。
 - 部署：Qoder Sites 发布并改为 public；匿名访问、资源加载、音频播放均复验通过。
-- 源码：GitHub 公开仓库 https://github.com/lxiaotian685-web/jinlou-guide-web ，`main` 分支，commit `df2aa9f`；仓库主页绑定线上站点；未推送 `dist/`、`.qoder.site` 与内部素材脚本。
+- 源码：GitHub 公开仓库 https://github.com/lxiaotian685-web/jinlou-guide-web ，`main` 分支，首个公开版本 `df2aa9f`，阶段 A 第一批修复后为 `8afb97f`；仓库主页绑定线上站点；未推送 `dist/`、`.qoder.site` 与内部素材脚本。
 - 作品帖：五段式草稿见 `docs/作品帖-Qoder大赛.md`，截图见 `docs/screenshots/`。
 - 仍待本人完成：天池报名与实名/学生认证、填写 Qoder 账号、在天池论坛发布作品帖、11 月 30 日 18:00 前确认链接。
 
