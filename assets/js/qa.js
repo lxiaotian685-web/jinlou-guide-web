@@ -88,6 +88,7 @@ function answerCard(answer) {
 function renderRefusal(type, query) {
   const prefix = query ? `<p class="meta-line" style="margin-bottom:8px">检索“${escapeHtml(query)}”</p>` : "";
   resultEl.innerHTML = prefix + refusalCard(type);
+  window.MotionReveal?.refresh(resultEl);
 }
 
 function search(rawQuery) {
@@ -126,6 +127,7 @@ function search(rawQuery) {
     ${weak ? `<p class="meta-line" style="margin-bottom:8px">未精确匹配问题，以下是与关键词相关的资料。</p>` : ""}
     <div class="grid">${picked.map((item) => answerCard(item.answer)).join("")}</div>
   `;
+  window.MotionReveal?.refresh(resultEl);
 }
 
 function chip(label, question) {

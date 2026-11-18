@@ -269,6 +269,7 @@ async function init() {
     renderTasks();
     renderQuiz();
     renderCard();
+    window.MotionReveal?.refresh();
     bindEvents();
 
     if (location.hash) {

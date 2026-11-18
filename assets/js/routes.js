@@ -20,7 +20,6 @@ function renderRoutes() {
       <article class="card ticks route-card" data-route="${escapeHtml(route.id)}">
         <div class="route-cover">
           <img src="${escapeHtml(firstSpot.image.src)}" alt="${escapeHtml(firstSpot.image.alt)}" loading="lazy">
-          <span class="route-folio">ROUTE / ${num}</span>
         </div>
         <div class="route-body">
           <div class="route-meta">
@@ -50,6 +49,7 @@ function renderRoutes() {
     `;
   }).join("");
   updateCurrent();
+  window.MotionReveal?.refresh();
 }
 
 function updateCurrent() {

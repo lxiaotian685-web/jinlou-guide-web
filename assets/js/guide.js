@@ -72,7 +72,6 @@ function renderSpots(data) {
       <article class="card ticks spot" id="${escapeHtml(spot.id)}">
         <div class="spot-media">
           <img class="spot-photo" src="${escapeHtml(spot.image.src)}" alt="${escapeHtml(spot.image.alt)}" loading="lazy">
-          <span class="spot-folio"><em>NO.</em><strong>${num}</strong></span>
         </div>
         <div class="spot-body">
           <div class="spot-meta">
@@ -133,6 +132,7 @@ async function init() {
     renderSourceList(data, document.getElementById("source-list"));
     const notice = document.getElementById("audio-notice");
     if (notice) notice.textContent = data.meta.audioNotice;
+    window.MotionReveal?.refresh();
     scrollToHash();
     setTimeout(scrollToHash, 60);
     window.addEventListener("hashchange", () => scrollToHash());
