@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>溯源问答 · 金漆木雕手记</title>
+  <meta name="description" content="碧江金楼资料检索：按关键词匹配已审核问答，展示答案出处；查不到或信息会变动时明确拒绝回答。">
+  <meta name="theme-color" content="#f2ede4">
+  <link rel="icon" href="public/img/seal.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">金</span>金漆木雕手记</a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html">首页</a>
+        <a href="guide.html">导览</a>
+        <a href="routes.html">路线</a>
+        <a href="qa.html">问答</a>
+        <a href="explore.html">成果</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="wrap page-head-inner">
+        <div class="page-head-top"><span class="eyebrow">FAQ / 问答</span><span class="folio">NO. 04</span></div>
+        <div class="page-head-main">
+          <div>
+            <h1>先找答案，再看出处</h1>
+            <p class="lede">这里做的是本地资料检索：按关键词匹配已审核问答，不生成新内容，也不是实时生成式 AI。查不到、或问题涉及会变动的信息时，会明确说“无法确认”。</p>
+          </div>
+          <div class="seal" aria-hidden="true"><span>问</span><span>答</span></div>
+        </div>
+        <div class="page-head-rule"><span></span><em>BIJIANG · ANSWER ARCHIVE</em></div>
+      </div>
+    </section>
+
+    <div class="wrap page-body">
+      <section class="section card ticks" aria-labelledby="search-title">
+        <div class="section-head" style="margin-top:0">
+          <h2 id="search-title">输入关键词</h2>
+          <p>本地检索 · 不生成新内容</p>
+        </div>
+        <form class="search-box" id="qa-form" role="search">
+          <div class="search-row">
+            <label class="sr-only" for="qa-input">输入要查的问题或关键词</label>
+            <input id="qa-input" name="q" type="search" placeholder="例如：金楼原名、泥楼墙、廿四咏" autocomplete="off">
+            <button class="btn" type="submit">检索资料</button>
+          </div>
+        </form>
+        <div class="chips" id="chips" aria-label="常见问题"></div>
+        <div id="qa-result" aria-live="polite" style="margin-top:16px"></div>
+      </section>
+
+      <section class="section" aria-labelledby="faq-title">
+        <div class="section-head">
+          <h2 id="faq-title">常见问题</h2>
+          <p>点问题直接查看答案</p>
+        </div>
+        <div class="chips" id="faq-list"></div>
+      </section>
+
+      <section class="section card ticks scope" aria-labelledby="scope-title">
+        <h2 id="scope-title">可查范围</h2>
+        <ul>
+          <li>六处建筑与壁雕的基本信息：金楼、职方第、泥楼、亦渔遗塾、后花园、碧江廿四咏。</li>
+          <li>建筑年代、形制、墙体材料、木雕工艺、牌坊家训、家塾空间与壁雕尺寸。</li>
+          <li>“金屋藏娇”等民间传说的性质说明：只作故事，不作为史实。</li>
+        </ul>
+        <p class="meta-line" style="margin-top:8px">不提供：票价、开放时间、临时闭馆、停车、预约、讲解服务、官方认证与实时导航。</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>金漆木雕手记 · 学生研学作品，与景区无官方合作。</p>
+      <p>资料核对日期：2026-11-18。动态信息请以现场公告或景区公众号为准。</p>
+      <p><a href="guide.html#sources">查看全部来源</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/qa.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>观察与成果 · 金漆木雕手记</title>
+  <meta name="description" content="碧江金楼研学观察任务、小测、进度与可打印研学卡。进度只保存在本机浏览器，不登录。">
+  <meta name="theme-color" content="#f2ede4">
+  <link rel="icon" href="public/img/seal.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">金</span>金漆木雕手记</a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html">首页</a>
+        <a href="guide.html">导览</a>
+        <a href="routes.html">路线</a>
+        <a href="qa.html">问答</a>
+        <a href="explore.html">成果</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head print-hide">
+      <div class="wrap page-head-inner">
+        <div class="page-head-top"><span class="eyebrow">FIELD NOTES / 观察</span><span class="folio">NO. 05</span></div>
+        <div class="page-head-main">
+          <div>
+            <h1>完成任务，带走记录</h1>
+            <p class="lede">观察题允许选择“未到现场”，不会把未观察写成已观察。进度只保存在本机浏览器，刷新后仍在；换设备或清除浏览器数据会丢失。</p>
+          </div>
+          <div class="seal" aria-hidden="true"><span>研</span><span>学</span></div>
+        </div>
+        <div class="page-head-rule"><span></span><em>BIJIANG · FIELD NOTES</em></div>
+      </div>
+    </section>
+
+    <div class="wrap page-body">
+      <section class="section card ticks print-hide" aria-labelledby="progress-title">
+        <div class="section-head" style="margin-top:0">
+          <h2 id="progress-title">我的进度</h2>
+          <p>只存在本机</p>
+        </div>
+        <div class="progress-wrap">
+          <p id="progress-text" class="meta-line">正在读取本机记录…</p>
+          <div class="progress-bar" role="progressbar" aria-labelledby="progress-title" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+            <span id="progress-bar"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="nickname">昵称（可留空，只用于研学卡）</label>
+          <input id="nickname" name="nickname" type="text" maxlength="20" placeholder="例如：小林" autocomplete="off">
+        </div>
+        <div class="field">
+          <span class="meta-line">当前路线：<strong id="route-summary">未选择</strong></span>
+          <div class="actions">
+            <a class="btn small ghost" href="routes.html">去选择或更换路线</a>
+            <button class="btn small ghost" type="button" id="reset-btn">清空本机记录</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section print-hide" aria-labelledby="tasks-title">
+        <div class="section-head">
+          <h2 id="tasks-title">观察任务</h2>
+          <p>看着实物作答；没到现场请选“未到现场”</p>
+        </div>
+        <div id="task-list"></div>
+      </section>
+
+      <section class="section print-hide" aria-labelledby="quiz-title">
+        <div class="section-head">
+          <h2 id="quiz-title">小测</h2>
+          <p id="quiz-score">还没有作答</p>
+        </div>
+        <div class="card ticks" id="quiz-list"></div>
+      </section>
+
+      <section class="section print-card" id="print-area" aria-labelledby="card-title">
+        <div class="print-head">
+          <div>
+            <h2 id="card-title">金漆木雕手记 · 研学卡</h2>
+            <p class="print-sub">碧江金楼资料研学 · 非官方证书</p>
+          </div>
+          <p class="print-sub">打印日期：<span id="card-date"></span></p>
+        </div>
+        <dl class="print-meta">
+          <div><dt>昵称</dt><dd id="card-nickname">（未填写）</dd></div>
+          <div><dt>路线</dt><dd id="card-route">未选择</dd></div>
+          <div><dt>观察完成</dt><dd id="card-obs">0 / 6</dd></div>
+          <div><dt>小测</dt><dd id="card-quiz">尚未作答</dd></div>
+        </dl>
+        <div class="print-section">
+          <h3>已完成并核对资料的观察</h3>
+          <ul class="print-list" id="card-obs-list"></ul>
+        </div>
+        <div class="print-section" id="card-away-wrap" hidden>
+          <h3>选择“未到现场”的任务（不计入完成）</h3>
+          <ul class="print-list" id="card-away-list"></ul>
+        </div>
+        <div class="print-section">
+          <h3>资料说明</h3>
+          <p class="meta-line" style="font-size:0.8rem">本卡只记录真实完成的任务。票价、开放与通行等动态信息未收录，请以现场公告为准。本站与景区无官方合作。音频为原始讲解录音，未逐条审核。</p>
+        </div>
+        <div class="print-sources" id="card-sources"></div>
+        <div class="card-actions no-print">
+          <button class="btn" type="button" id="print-btn">打印研学卡</button>
+          <a class="btn ghost" href="qa.html">去查出处</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>金漆木雕手记 · 学生研学作品，与景区无官方合作。</p>
+      <p>进度仅存本机 localStorage，不上传、不登录。资料核对日期：2026-11-18。</p>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/explore.js"></script>
+</body>
+</html>

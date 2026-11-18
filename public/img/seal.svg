@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="金">
+  <rect width="64" height="64" rx="10" fill="#96382c"/>
+  <rect x="5" y="5" width="54" height="54" rx="5" fill="none" stroke="#f6f0e4" stroke-width="2"/>
+  <text x="32" y="44" text-anchor="middle" font-size="34" font-family="Songti SC, STSong, serif" fill="#f6f0e4">金</text>
+</svg>

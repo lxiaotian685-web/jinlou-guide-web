@@ -1,0 +1,12 @@
+dist/
+.screens/
+.refs/
+.tools/
+node_modules/
+.env
+.env.*
+*.qoder.site
+docs/prepare-materials.ps1
+docs/项目方案与任务拆解.md
+.DS_Store
+Thumbs.db
