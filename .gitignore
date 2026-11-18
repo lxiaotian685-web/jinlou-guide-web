@@ -8,5 +8,7 @@ node_modules/
 *.qoder.site
 docs/prepare-materials.ps1
 docs/项目方案与任务拆解.md
+docs/Codex交接-分步方案.md
+docs/阶段A-只读审计问题清单-给Qoder.md
 .DS_Store
 Thumbs.db

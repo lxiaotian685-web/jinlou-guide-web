@@ -795,6 +795,7 @@ main { padding: 0 0 40px; }
   grid-template-columns: 1fr;
   overflow: hidden;
   padding: 0;
+  scroll-margin-top: 150px;
 }
 
 .spot-media {
@@ -1462,9 +1463,14 @@ main { padding: 0 0 40px; }
   font-size: 0.9rem;
 }
 
-.print-meta div { display: flex; gap: 8px; }
+.print-meta div { display: flex; gap: 8px; min-width: 0; }
 .print-meta dt { flex: 0 0 5.5em; color: var(--muted); }
-.print-meta dd { margin: 0; }
+.print-meta dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 
 .print-section { margin-top: 16px; }
 
@@ -1546,7 +1552,7 @@ main { padding: 0 0 40px; }
   .page-head { padding: 42px 0 34px; }
 
   .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .spot { grid-template-columns: 360px minmax(0, 1fr); }
+  .spot { grid-template-columns: 360px minmax(0, 1fr); scroll-margin-top: 90px; }
   .spot-media { min-height: 100%; }
   .spot-body { padding: 24px; }
 

@@ -111,6 +111,20 @@ function renderSpots(data) {
   }).join("");
 }
 
+function scrollToHash() {
+  const raw = location.hash.slice(1);
+  if (!raw) return;
+  let id;
+  try {
+    id = decodeURIComponent(raw);
+  } catch {
+    return;
+  }
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.scrollIntoView({ block: "start" });
+}
+
 async function init() {
   try {
     const data = await loadData();
@@ -119,6 +133,9 @@ async function init() {
     renderSourceList(data, document.getElementById("source-list"));
     const notice = document.getElementById("audio-notice");
     if (notice) notice.textContent = data.meta.audioNotice;
+    scrollToHash();
+    setTimeout(scrollToHash, 60);
+    window.addEventListener("hashchange", () => scrollToHash());
   } catch (error) {
     showLoadError(error);
   }

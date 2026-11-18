@@ -25,15 +25,17 @@ function hasKeyword(query, keywords) {
 
 function scoreAnswer(answer, query) {
   let score = 0;
+  let reverseHit = false;
   for (const alias of answer.aliases) {
     const a = normalize(alias);
     if (!a) continue;
     if (query.includes(a)) score += 100 + a.length;
-    else if (a.includes(query) && query.length >= 2) score += 40;
+    else if (a.includes(query) && query.length >= 2) reverseHit = true;
   }
+  if (reverseHit) score += 40;
   for (const keyword of answer.keywords) {
     const key = normalize(keyword);
-    if (key && query.includes(key)) score += 10;
+    if (key.length >= 2 && query.includes(key)) score += 10;
   }
   return score;
 }
@@ -46,6 +48,7 @@ function sourceMetaFor(data, ids) {
 
 function refusalCard(type) {
   const item = data.refusals[type];
+  const label = type === "dynamic" ? "动态信息 / 拒答" : type === "official" ? "资料边界 / 拒答" : "NO MATCH / 拒答";
   const extra = type === "unknown" ? `
     <div class="scope-mini">
       当前可查：
@@ -57,7 +60,7 @@ function refusalCard(type) {
     </div>` : "";
   return `
     <div class="card answer-card refuse">
-      <div class="answer-kicker"><span class="eyebrow">NO MATCH / 拒答</span></div>
+      <div class="answer-kicker"><span class="eyebrow">${label}</span></div>
       <h3>${escapeHtml(item.title)}</h3>
       <p class="answer-text">${escapeHtml(item.text)}</p>
       ${extra}
@@ -114,11 +117,13 @@ function search(rawQuery) {
   }
 
   const top = scored[0].score;
+  const weak = top < 100;
   const threshold = top >= 100 ? 100 : 10;
   const picked = scored.filter((item) => item.score >= threshold).slice(0, 3);
 
   resultEl.innerHTML = `
-    <p class="meta-line" style="margin-bottom:8px">检索“${escapeHtml(rawQuery)}”，找到 ${picked.length} 条已审核资料。</p>
+    <p class="meta-line" style="margin-bottom:8px">检索“${escapeHtml(rawQuery)}”，找到 ${picked.length} 条${weak ? "相关资料" : "已审核资料"}。</p>
+    ${weak ? `<p class="meta-line" style="margin-bottom:8px">未精确匹配问题，以下是与关键词相关的资料。</p>` : ""}
     <div class="grid">${picked.map((item) => answerCard(item.answer)).join("")}</div>
   `;
 }
