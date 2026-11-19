@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>溯源问答 · 金漆木雕手记</title>
-  <meta name="description" content="碧江金楼资料检索：按关键词匹配已审核问答，展示答案出处；查不到或信息会变动时明确拒绝回答。">
+  <meta name="description" content="碧江金楼资料问答：DeepSeek 依据已登记资料整理答案，展示答案出处；资料不足或信息会变动时明确说明。">
   <meta name="theme-color" content="#f2ede4">
   <link rel="icon" href="public/img/logo.png" type="image/png">
   <link rel="stylesheet" href="assets/css/style.css">
@@ -31,7 +31,7 @@
         <div class="page-head-main">
           <div>
             <h1>先找答案，再看出处</h1>
-            <p class="lede">这里做的是本地资料检索：按关键词匹配已审核问答，不生成新内容，也不是实时生成式 AI。查不到、或问题涉及会变动的信息时，会明确说“无法确认”。</p>
+            <p class="lede">输入问题，DeepSeek 只依据本站已登记资料整理答案，并给出可核对出处；资料不足或涉及会变动的信息时会明确说明，不编造。</p>
           </div>
           <div class="seal" aria-hidden="true"><span>问</span><span>答</span></div>
         </div>
@@ -42,16 +42,17 @@
     <div class="wrap page-body">
       <section class="section card ticks" aria-labelledby="search-title">
         <div class="section-head" style="margin-top:0">
-          <h2 id="search-title">输入关键词</h2>
-          <p>本地检索 · 不生成新内容</p>
+          <h2 id="search-title">输入问题</h2>
+          <p>DeepSeek 整理 · 标注出处</p>
         </div>
         <form class="search-box" id="qa-form" role="search">
           <div class="search-row">
-            <label class="sr-only" for="qa-input">输入要查的问题或关键词</label>
+            <label class="sr-only" for="qa-input">输入要查的问题</label>
             <input id="qa-input" name="q" type="search" placeholder="例如：金楼原名、泥楼墙、廿四咏" autocomplete="off">
-            <button class="btn" type="submit">检索资料</button>
+            <button class="btn" type="submit">提问</button>
           </div>
         </form>
+        <p class="meta-line" style="margin-top:8px">AI 只依据本站已登记资料整理，事实以出处和现场展签为准。</p>
         <div class="chips" id="chips" aria-label="常见问题"></div>
         <div id="qa-result" aria-live="polite" style="margin-top:16px"></div>
       </section>

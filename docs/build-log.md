@@ -125,3 +125,12 @@
 - 按本人要求，服务页不再重复放手绘导览图及六个编号点位，只保留地址、电话、开放、交通、购票入口和周边推荐。
 - 手绘地图与路线选择仍保留在导览页；服务页页头说明、meta 描述和服务边界同步去掉手绘地图表述。
 - 验证：服务页无地图图片请求，周边推荐与购票入口正常；导览页地图不受影响。
+
+## 2026-11-19 DeepSeek 问答接入
+
+- 新增 Qoder Sites Edge Function `functions/index.ts`，由服务端代理 DeepSeek `chat/completions`，模型 `deepseek-chat`；浏览器不接触 API Key。
+- 问答页改为异步提问：先做动态信息与官方认证拒答，再把问题交给 DeepSeek；返回答案、出处与“AI 整理/资料不足”标记；接口失败时回退到原本地关键词检索并明确提示。
+- 知识包 `functions/knowledge.ts` 由 `content/site.json` 生成；只把检索命中的 8 条已登记问答作为上下文，模型被要求不得编造，资料不足时输出 `[INSUFFICIENT_EVIDENCE]`。
+- 服务端加 300 字问题上限、20 次/分钟/IP 限流、15 秒上游超时、10 分钟同问题缓存；不返回上游原始错误或密钥。
+- 本地验证：DeepSeek 真实回答金楼、泥楼问题并返回来源；票价/官方认证拒答；餐饮等资料不足问题标“资料不足”；接口失败回退本地检索；缺 Key 返回 503 `service_not_configured`。
+- 发布状态：函数与站点 Secret 名已进入 Qoder Sites 草稿，`DEEPSEEK_API_KEY` 尚需在 Site Settings 录入并同步后才能发布。

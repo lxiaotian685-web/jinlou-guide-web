@@ -85,13 +85,117 @@ function answerCard(answer) {
   `;
 }
 
-function renderRefusal(type, query) {
+function renderRefusal(type, query, notice = "") {
   const prefix = query ? `<p class="meta-line" style="margin-bottom:8px">检索“${escapeHtml(query)}”</p>` : "";
-  resultEl.innerHTML = prefix + refusalCard(type);
+  const noticeHtml = notice ? `<p class="meta-line" style="margin-bottom:8px">${escapeHtml(notice)}</p>` : "";
+  resultEl.innerHTML = noticeHtml + prefix + refusalCard(type);
   window.MotionReveal?.refresh(resultEl);
 }
 
-function search(rawQuery) {
+function aiRefusalCard(payload) {
+  const label = payload.refusal === "dynamic" ? "动态信息 / 拒答" : payload.refusal === "official" ? "资料边界 / 拒答" : "NO MATCH / 拒答";
+  return `
+    <div class="card answer-card refuse">
+      <div class="answer-kicker"><span class="eyebrow">${label}</span></div>
+      <h3>${escapeHtml(payload.title || "现有资料无法确认")}</h3>
+      <p class="answer-text">${escapeHtml(payload.text || payload.answer || "")}</p>
+    </div>
+  `;
+}
+
+function aiAnswerCard(payload, question) {
+  const sourceIds = Array.isArray(payload.sourceIds) ? payload.sourceIds.filter((id) => typeof id === "string") : [];
+  const meta = sourceIds.length
+    ? sourceMetaFor(data, sourceIds)
+    : payload.insufficient ? "" : "<span>出处：本站已登记资料</span>";
+  const label = payload.insufficient ? "资料不足" : "AI 整理";
+  return `
+    <div class="card answer-card">
+      <div class="answer-kicker">
+        <span class="eyebrow">ANSWER / DEEPSEEK</span>
+        <span class="badge ${payload.insufficient ? "note" : "ok"}">${label}</span>
+      </div>
+      <h3>${escapeHtml(question)}</h3>
+      <p class="answer-text">${escapeHtml(payload.answer)}</p>
+      ${meta ? `<div class="fact-meta">${meta}</div>` : ""}
+      <p class="onsite-note">AI 只依据本站已登记资料整理；事实与细节仍以出处和现场展签为准。</p>
+    </div>
+  `;
+}
+
+function fallbackNotice(code) {
+  if (code === "service_not_configured") return "DeepSeek 尚未配置密钥，已切换为本地资料检索。";
+  if (code === "rate_limited" || code === "provider_rate_limited") return "提问太频繁，已切换为本地资料检索。";
+  if (code === "provider_timeout") return "DeepSeek 响应超时，已切换为本地资料检索。";
+  return "DeepSeek 暂时不可用，已切换为本地资料检索。";
+}
+
+let asking = false;
+
+async function askQuestion(rawQuestion) {
+  const raw = String(rawQuestion ?? "").trim();
+  const query = normalize(raw);
+  if (!query) {
+    resultEl.innerHTML = `<div class="empty">输入一个建筑名、工艺名或问题，例如“泥楼墙”“廿四咏”。</div>`;
+    return;
+  }
+
+  if (hasKeyword(query, data.refusals.dynamic.keywords)) {
+    renderRefusal("dynamic", raw);
+    return;
+  }
+  if (hasKeyword(query, data.refusals.official.keywords)) {
+    renderRefusal("official", raw);
+    return;
+  }
+  if (asking) return;
+
+  asking = true;
+  const submit = document.querySelector("#qa-form button[type='submit']");
+  if (submit) submit.disabled = true;
+  resultEl.setAttribute("aria-busy", "true");
+  resultEl.innerHTML = `<div class="empty">DeepSeek 正在根据已登记资料整理回答…</div>`;
+
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 20_000);
+    let response;
+    try {
+      response = await fetch("/functions/v1/app", {
+        method: "POST",
+        headers: { "content-type": "application/json", accept: "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ question: raw }),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) throw new Error("invalid_response");
+    const payload = await response.json();
+    if (!response.ok || !payload || payload.ok !== true) {
+      throw new Error(payload?.error || "request_failed");
+    }
+    if (payload.mode === "refusal") {
+      resultEl.innerHTML = aiRefusalCard(payload);
+    } else {
+      if (typeof payload.answer !== "string" || !payload.answer.trim()) throw new Error("empty_answer");
+      resultEl.innerHTML = aiAnswerCard(payload, raw);
+    }
+    window.MotionReveal?.refresh(resultEl);
+  } catch (error) {
+    const code = error?.name === "AbortError" ? "provider_timeout" : String(error?.message || "");
+    search(raw, { notice: fallbackNotice(code) });
+  } finally {
+    asking = false;
+    if (submit) submit.disabled = false;
+    resultEl.removeAttribute("aria-busy");
+  }
+}
+
+function search(rawQuery, options = {}) {
   const query = normalize(rawQuery);
   if (!query) {
     resultEl.innerHTML = `<div class="empty">输入一个建筑名、工艺名或问题，例如“泥楼墙”“廿四咏”。</div>`;
@@ -99,11 +203,11 @@ function search(rawQuery) {
   }
 
   if (hasKeyword(query, data.refusals.dynamic.keywords)) {
-    renderRefusal("dynamic", rawQuery);
+    renderRefusal("dynamic", rawQuery, options.notice);
     return;
   }
   if (hasKeyword(query, data.refusals.official.keywords)) {
-    renderRefusal("official", rawQuery);
+    renderRefusal("official", rawQuery, options.notice);
     return;
   }
 
@@ -113,7 +217,7 @@ function search(rawQuery) {
     .sort((a, b) => b.score - a.score);
 
   if (!scored.length) {
-    renderRefusal("unknown", rawQuery);
+    renderRefusal("unknown", rawQuery, options.notice);
     return;
   }
 
@@ -121,8 +225,10 @@ function search(rawQuery) {
   const weak = top < 100;
   const threshold = top >= 100 ? 100 : 10;
   const picked = scored.filter((item) => item.score >= threshold).slice(0, 3);
+  const noticeHtml = options.notice ? `<p class="meta-line" style="margin-bottom:8px">${escapeHtml(options.notice)}</p>` : "";
 
   resultEl.innerHTML = `
+    ${noticeHtml}
     <p class="meta-line" style="margin-bottom:8px">检索“${escapeHtml(rawQuery)}”，找到 ${picked.length} 条${weak ? "相关资料" : "已审核资料"}。</p>
     ${weak ? `<p class="meta-line" style="margin-bottom:8px">未精确匹配问题，以下是与关键词相关的资料。</p>` : ""}
     <div class="grid">${picked.map((item) => answerCard(item.answer)).join("")}</div>
@@ -157,7 +263,7 @@ function bindChips() {
     const button = event.target.closest("[data-q]");
     if (!button) return;
     inputEl.value = button.dataset.q;
-    search(button.dataset.q);
+    askQuestion(button.dataset.q);
     resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
 }
@@ -169,12 +275,12 @@ async function init() {
     bindChips();
     document.getElementById("qa-form").addEventListener("submit", (event) => {
       event.preventDefault();
-      search(inputEl.value);
+      askQuestion(inputEl.value);
     });
     const initial = new URLSearchParams(location.search).get("q");
     if (initial) {
       inputEl.value = initial;
-      search(initial);
+      askQuestion(initial);
     }
   } catch (error) {
     showLoadError(error);
