@@ -500,56 +500,175 @@
   ],
   "routes": [
     {
-      "id": "family",
-      "name": "亲子发现路线",
-      "audience": "适合亲子同行，边走边找细节",
-      "duration": "约60–90分钟（主题参考）",
-      "intro": "先看画面，再看材料，最后进书楼。用“找一找”把建筑变成可以观察的游戏。",
-      "steps": [
+      "id": "visitor-classic",
+      "name": "经典参观参考线",
+      "theme": "参考公开游客实走记录，顺序待景区确认",
+      "audience": "首次到访游客",
+      "duration": "参考游记约1-1.5小时，待实测",
+      "verificationLabel": "资料参考",
+      "passageNotice": "请以现场指示和工作人员安排为准；遇临时关闭时不要进入。",
+      "points": [
         {
-          "spotId": "houhuayuan",
-          "focus": "在长廊壁雕里找船、桥和集市。"
+          "number": 1,
+          "siteNumber": 2,
+          "name": "职方第",
+          "positionX": 75,
+          "positionY": 84
         },
         {
-          "spotId": "nilou",
-          "focus": "找蚝壳墙和罗马柱，说说它们为什么出现在同一座屋里。"
+          "number": 2,
+          "siteNumber": 4,
+          "name": "金楼",
+          "positionX": 41,
+          "positionY": 70
         },
         {
-          "spotId": "jinlou",
-          "focus": "数一数木雕里的花鸟，再找一块写着字的木板。"
+          "number": 3,
+          "siteNumber": 7,
+          "name": "泥楼",
+          "positionX": 41,
+          "positionY": 59
         },
         {
-          "spotId": "yiyu",
-          "focus": "读天井对联，想象当年家塾上课的样子。"
+          "number": 4,
+          "siteNumber": 15,
+          "name": "后花园",
+          "positionX": 26,
+          "positionY": 43
+        },
+        {
+          "number": 5,
+          "siteNumber": 10,
+          "name": "亦渔遗塾",
+          "positionX": 69,
+          "positionY": 14
         }
       ]
     },
     {
-      "id": "student",
-      "name": "学生研学路线",
-      "audience": "适合中学生与研学小组，带着问题做记录",
-      "duration": "约90–120分钟（主题参考）",
-      "intro": "从宅第礼制到木雕工艺，再到家塾与地方文本，把建筑放回它的生活现场。",
-      "steps": [
+      "id": "architecture-focus",
+      "name": "古建重点线",
+      "theme": "集中查看祠堂、宅第、金楼与传统民居",
+      "audience": "文化与摄影爱好者",
+      "duration": "用时待现场实走确认",
+      "verificationLabel": "资料参考",
+      "passageNotice": "请以现场指示和工作人员安排为准；遇临时关闭时不要进入。",
+      "points": [
         {
-          "spotId": "zhifangdi",
-          "focus": "读牌坊两面的家训，观察宅第的进深与石脚。"
+          "number": 1,
+          "siteNumber": 1,
+          "name": "南山祠",
+          "positionX": 84,
+          "positionY": 74
         },
         {
-          "spotId": "jinlou",
-          "focus": "记录木雕的雕法与题材，找出书法木刻。"
+          "number": 2,
+          "siteNumber": 2,
+          "name": "职方第",
+          "positionX": 75,
+          "positionY": 84
         },
         {
-          "spotId": "yiyu",
-          "focus": "比较家塾与宅第的空间差别，想一想教育在家族中的位置。"
+          "number": 3,
+          "siteNumber": 3,
+          "name": "对朝",
+          "positionX": 61,
+          "positionY": 78
         },
         {
-          "spotId": "nilou",
-          "focus": "从夯土墙、蚝壳墙到罗马柱，梳理材料与时代变化。"
+          "number": 4,
+          "siteNumber": 4,
+          "name": "金楼",
+          "positionX": 41,
+          "positionY": 70
         },
         {
-          "spotId": "niannsiyong",
-          "focus": "在壁雕中找水网、墟市与物产，理解“诗史互证”。"
+          "number": 5,
+          "siteNumber": 6,
+          "name": "伯韶医馆",
+          "positionX": 51,
+          "positionY": 61
+        },
+        {
+          "number": 6,
+          "siteNumber": 7,
+          "name": "泥楼",
+          "positionX": 41,
+          "positionY": 59
+        },
+        {
+          "number": 7,
+          "siteNumber": 8,
+          "name": "镬耳民居",
+          "positionX": 72,
+          "positionY": 54
+        },
+        {
+          "number": 8,
+          "siteNumber": 9,
+          "name": "镬耳大屋",
+          "positionX": 41,
+          "positionY": 48
+        },
+        {
+          "number": 9,
+          "siteNumber": 10,
+          "name": "亦渔遗塾",
+          "positionX": 69,
+          "positionY": 14
+        },
+        {
+          "number": 10,
+          "siteNumber": 11,
+          "name": "民居构件展示",
+          "positionX": 51,
+          "positionY": 19
+        }
+      ]
+    },
+    {
+      "id": "garden-slow",
+      "name": "园林慢游线",
+      "theme": "从核心建筑走向荷池、亭台与后花园",
+      "audience": "亲子与轻松游览游客",
+      "duration": "用时待现场实走确认",
+      "verificationLabel": "资料参考",
+      "passageNotice": "请以现场指示和工作人员安排为准；遇临时关闭时不要进入。",
+      "points": [
+        {
+          "number": 1,
+          "siteNumber": 4,
+          "name": "金楼",
+          "positionX": 41,
+          "positionY": 70
+        },
+        {
+          "number": 2,
+          "siteNumber": 15,
+          "name": "后花园",
+          "positionX": 26,
+          "positionY": 43
+        },
+        {
+          "number": 3,
+          "siteNumber": 13,
+          "name": "抱月亭",
+          "positionX": 42,
+          "positionY": 27
+        },
+        {
+          "number": 4,
+          "siteNumber": 12,
+          "name": "二十四咏",
+          "positionX": 42,
+          "positionY": 15
+        },
+        {
+          "number": 5,
+          "siteNumber": 14,
+          "name": "叠趣亭",
+          "positionX": 17,
+          "positionY": 71
         }
       ]
     }

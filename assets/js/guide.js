@@ -4,6 +4,8 @@ import {
   sourceById,
   sourceLink,
   renderSourceList,
+  loadState,
+  saveState,
   showLoadError
 } from "./app.js";
 
@@ -110,6 +112,85 @@ function renderSpots(data) {
   }).join("");
 }
 
+const SITE_TO_SPOT = {
+  2: "zhifangdi",
+  4: "jinlou",
+  7: "nilou",
+  10: "yiyu",
+  12: "niannsiyong",
+  15: "houhuayuan"
+};
+
+function initMap(data) {
+  const frame = document.getElementById("map-frame") || document.querySelector(".map-frame");
+  const options = document.getElementById("map-route-options");
+  const status = document.getElementById("map-route-status");
+  const svg = document.getElementById("map-route-svg");
+  const layer = document.getElementById("map-route-layer");
+  const legendBase = document.getElementById("map-legend-base");
+  const legendRoute = document.getElementById("map-legend-route");
+  if (!frame || !options || !svg || !layer) return null;
+
+  let state = loadState();
+  const basePins = [...frame.querySelectorAll(".map-pin")];
+  const spotForSite = (siteNumber) => data.spots.find((spot) => spot.id === SITE_TO_SPOT[siteNumber]) || null;
+
+  function render() {
+    const route = data.routes.find((item) => item.id === state.routeId);
+    options.innerHTML = data.routes.map((item) => `
+      <button class="map-route-chip ${item.id === state.routeId ? "active" : ""}" type="button" data-route="${escapeHtml(item.id)}">${escapeHtml(item.name)}</button>
+    `).join("") + `<button class="map-route-chip none ${route ? "" : "active"}" type="button" data-route="">不显示路线</button>`;
+
+    if (!route) {
+      basePins.forEach((pin) => { pin.hidden = false; });
+      svg.innerHTML = "";
+      layer.innerHTML = "";
+      if (legendBase) legendBase.hidden = false;
+      if (legendRoute) legendRoute.hidden = true;
+      if (status) status.textContent = "未选择路线，地图显示六处资料点。";
+      return;
+    }
+
+    basePins.forEach((pin) => { pin.hidden = true; });
+    svg.innerHTML = `<polyline points="${route.points.map((point) => `${point.positionX},${point.positionY}`).join(" ")}"></polyline>`;
+    layer.innerHTML = route.points.map((point) => {
+      const spot = spotForSite(point.siteNumber);
+      const label = `${point.number} ${point.name}`;
+      if (spot) {
+        return `<a class="map-route-point" style="left:${point.positionX}%;top:${point.positionY}%" href="#${escapeHtml(spot.id)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(point.name)}">${point.number}</a>`;
+      }
+      return `<span class="map-route-point is-missing" style="left:${point.positionX}%;top:${point.positionY}%" aria-label="${escapeHtml(label)}（本版未收录）" title="${escapeHtml(point.name)}（本版未收录）">${point.number}</span>`;
+    }).join("");
+
+    if (legendBase) legendBase.hidden = true;
+    if (legendRoute) {
+      legendRoute.hidden = false;
+      legendRoute.innerHTML = route.points.map((point) => {
+        const spot = spotForSite(point.siteNumber);
+        const content = `<span>${point.number}</span>${escapeHtml(point.name)}`;
+        return `<li>${spot ? `<a href="#${escapeHtml(spot.id)}">${content}</a>` : `<span class="is-missing">${content}</span>`}</li>`;
+      }).join("");
+    }
+    if (status) status.textContent = `${route.name} · ${route.points.length} 站 · ${route.verificationLabel}`;
+  }
+
+  options.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-route]");
+    if (!button) return;
+    state.routeId = button.dataset.route || null;
+    saveState(state);
+    render();
+  });
+
+  render();
+  return {
+    refresh() {
+      state = loadState();
+      render();
+    }
+  };
+}
+
 function scrollToHash() {
   const raw = location.hash.slice(1);
   if (!raw) return;
@@ -133,6 +214,8 @@ async function init() {
     const notice = document.getElementById("audio-notice");
     if (notice) notice.textContent = data.meta.audioNotice;
     window.MotionReveal?.refresh();
+    const mapView = initMap(data);
+    window.addEventListener("pageshow", () => mapView?.refresh());
     scrollToHash();
     setTimeout(scrollToHash, 60);
     window.addEventListener("hashchange", () => scrollToHash());
