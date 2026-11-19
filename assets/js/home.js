@@ -3,7 +3,9 @@ const slides = [...document.querySelectorAll(".hero-slide")];
 const dots = [...document.querySelectorAll(".hero-dot")];
 const prev = document.querySelector(".hero-arrow--prev");
 const next = document.querySelector(".hero-arrow--next");
+const counter = document.getElementById("hero-count");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const total = String(slides.length).padStart(2, "0");
 
 if (hero && slides.length) {
   let index = 0;
@@ -19,6 +21,7 @@ if (hero && slides.length) {
       dot.setAttribute("aria-selected", active ? "true" : "false");
       dot.setAttribute("aria-current", active ? "true" : "false");
     });
+    if (counter) counter.textContent = `${String(index + 1).padStart(2, "0")} / ${total}`;
   };
 
   const stop = () => {

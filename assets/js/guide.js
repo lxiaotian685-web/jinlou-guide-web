@@ -152,7 +152,11 @@ function initMap(data) {
     }
 
     basePins.forEach((pin) => { pin.hidden = true; });
-    svg.innerHTML = `<polyline points="${route.points.map((point) => `${point.positionX},${point.positionY}`).join(" ")}"></polyline>`;
+    const points = route.points.map((point) => `${point.positionX},${point.positionY}`).join(" ");
+    svg.innerHTML = `
+      <polyline class="route-halo" points="${points}"></polyline>
+      <polyline class="route-line" points="${points}"></polyline>
+    `;
     layer.innerHTML = route.points.map((point) => {
       const spot = spotForSite(point.siteNumber);
       const label = `${point.number} ${point.name}`;
@@ -216,6 +220,9 @@ async function init() {
     window.MotionReveal?.refresh();
     const mapView = initMap(data);
     window.addEventListener("pageshow", () => mapView?.refresh());
+    window.addEventListener("storage", (event) => {
+      if (event.key === "jinlou-guide-v1") mapView?.refresh();
+    });
     scrollToHash();
     setTimeout(scrollToHash, 60);
     window.addEventListener("hashchange", () => scrollToHash());
