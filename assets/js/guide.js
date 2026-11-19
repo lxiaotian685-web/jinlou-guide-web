@@ -145,6 +145,19 @@ const SITE_TO_SPOT = {
   15: "houhuayuan"
 };
 
+const MAP_V2_POINT_POSITIONS = {
+  4: [70, 21],
+  8: [82, 55],
+  9: [50, 44],
+  13: [38, 20],
+  14: [17, 63]
+};
+
+function mapV2Point(point) {
+  const position = MAP_V2_POINT_POSITIONS[point.siteNumber];
+  return position ? { ...point, positionX: position[0], positionY: position[1] } : point;
+}
+
 function initMap(data) {
   const frame = document.getElementById("map-frame") || document.querySelector(".map-frame");
   const options = document.getElementById("map-route-options");
@@ -176,12 +189,13 @@ function initMap(data) {
     }
 
     basePins.forEach((pin) => { pin.hidden = true; });
-    const points = route.points.map((point) => `${point.positionX},${point.positionY}`).join(" ");
+    const routePoints = route.points.map(mapV2Point);
+    const points = routePoints.map((point) => `${point.positionX},${point.positionY}`).join(" ");
     svg.innerHTML = `
       <polyline class="route-halo" points="${points}"></polyline>
       <polyline class="route-line" points="${points}"></polyline>
     `;
-    layer.innerHTML = route.points.map((point) => {
+    layer.innerHTML = routePoints.map((point) => {
       const spot = spotForSite(point.siteNumber);
       const label = `${point.number} ${point.name}`;
       if (spot) {
