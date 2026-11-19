@@ -51,19 +51,42 @@ function audioTemplate(spot, data) {
     <details class="audio-block">
       <summary>
         <span class="eyebrow">AUDIO / 讲解</span>
-        <span class="audio-note">${spot.audio.length} 段 · 点击展开</span>
+        <span class="audio-note">${spot.audio.length} 段 · 含讲解稿 · 点击展开</span>
       </summary>
       <div class="audio-body">
         ${spot.audio.map((track) => `
           <div class="audio-row">
             <span class="audio-label">${escapeHtml(track.label)}</span>
-            <audio controls preload="none" src="${escapeHtml(track.src)}"></audio>
+            <audio controls preload="none" src="${escapeHtml(track.src)}" aria-label="${escapeHtml(track.label)}讲解音频"></audio>
+            ${track.transcript ? `
+              <details class="audio-transcript">
+                <summary>讲解稿</summary>
+                <p>${escapeHtml(track.transcript)}</p>
+              </details>
+            ` : ""}
           </div>
         `).join("")}
         <p class="onsite-note">${escapeHtml(data.meta.audioNotice)}</p>
       </div>
     </details>
   `;
+}
+
+function bindAudioTranscripts() {
+  document.querySelectorAll("#spot-list audio").forEach((audio) => {
+    audio.addEventListener("play", () => {
+      const row = audio.closest(".audio-row");
+      if (!row) return;
+      document.querySelectorAll("#spot-list .audio-row.is-playing").forEach((item) => {
+        if (item !== row) item.classList.remove("is-playing");
+      });
+      row.classList.add("is-playing");
+      row.querySelector(".audio-transcript")?.setAttribute("open", "");
+    });
+    const clearPlaying = () => audio.closest(".audio-row")?.classList.remove("is-playing");
+    audio.addEventListener("pause", clearPlaying);
+    audio.addEventListener("ended", clearPlaying);
+  });
 }
 
 function renderSpots(data) {
@@ -110,6 +133,7 @@ function renderSpots(data) {
       </article>
     `;
   }).join("");
+  bindAudioTranscripts();
 }
 
 const SITE_TO_SPOT = {

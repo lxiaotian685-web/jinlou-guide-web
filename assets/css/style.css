@@ -1058,6 +1058,45 @@ main { padding: 0 0 40px; }
   height: 36px;
 }
 
+.audio-row.is-playing .audio-label { color: var(--red); }
+
+.audio-transcript {
+  margin-top: 2px;
+}
+
+.audio-transcript summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  color: var(--red);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.audio-transcript summary::-webkit-details-marker { display: none; }
+
+.audio-transcript summary::after {
+  content: "+";
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.audio-transcript[open] summary::after { content: "−"; }
+
+.audio-transcript p {
+  margin: 7px 0 0;
+  padding: 10px 12px;
+  border-left: 2px solid var(--line-strong);
+  background: var(--paper);
+  color: #2c3a33;
+  font-size: 0.82rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
 .spot-foot {
   display: flex;
   flex-wrap: wrap;

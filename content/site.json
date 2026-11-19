@@ -5,7 +5,7 @@
     "reviewDate": "2026-11-18",
     "intro": "为到访碧江金楼的亲子与学生准备的一份资料研学手记：先看有出处的建筑与工艺，再按兴趣走一条主题路线，最后带走一张自己完成的研学卡。",
     "scope": "本站是经碧江金楼景区同意的合作研学作品。所有文化结论均标注来源并记录核对日期；票价、开放、通行等动态信息请以现场公告为准。",
-    "audioNotice": "音频为系统语音试听稿：普通话依据已审核讲解词生成，粤语与英语由普通话稿机器翻译生成，发音与用词待景区人工审核；年代、人物等细节以页面来源为准。",
+    "audioNotice": "音频为系统语音试听稿，每段附对应讲解稿：普通话依据已审核讲解词生成，粤语与英语由普通话稿机器翻译生成，发音与用词待景区人工审核；年代、人物等细节以页面来源为准。",
     "photoCredit": "项目素材"
   },
   "sources": [
@@ -115,15 +115,18 @@
       "audio": [
         {
           "src": "public/audio/jinlou-zh.mp3",
-          "label": "普通话"
+          "label": "普通话",
+          "transcript": "欢迎来到金楼。金楼原名赋鹤楼，是苏丕文所建的藏书楼。楼内保存花罩、帘架、藻井和天花等木雕构件，运用浮雕、线刻、镂雕及玻璃镶嵌等技法，并施以泥金和贴金装饰。"
         },
         {
           "src": "public/audio/jinlou-yue.mp3",
-          "label": "粤语"
+          "label": "粤语",
+          "transcript": "欢迎嚟到金楼。金楼原名赋鹤楼，係苏丕文起嘅藏书楼。楼入面保存花罩、帘架、藻井同天花等木雕构件，运用浮雕、线刻、镂雕同玻璃镶嵌等技法，并加上泥金同贴金装饰。"
         },
         {
           "src": "public/audio/jinlou-en.mp3",
-          "label": "英语"
+          "label": "英语",
+          "transcript": "Welcome to Jinlou. Jinlou, originally named Fuhe Lou, was a library built by Su Piwen. Inside, wooden carvings such as openwork screens, curtain frames, coffered ceilings and ceiling panels have been preserved. They use relief carving, line engraving, pierced carving and glass inlay, and are finished with gold paint and gold leaf."
         }
       ]
     },
@@ -191,15 +194,18 @@
       "audio": [
         {
           "src": "public/audio/zhifangdi-zh.mp3",
-          "label": "普通话"
+          "label": "普通话",
+          "transcript": "欢迎来到职方第。职方第是清代兵部职方员外郎苏丕文的宅第，建于清嘉庆、道光年间。建筑原有五进，现存四进，过亭、砖石牌坊及题刻是重点看点，是晚清珠三角广府民居建筑的代表。"
         },
         {
           "src": "public/audio/zhifangdi-yue.mp3",
-          "label": "粤语"
+          "label": "粤语",
+          "transcript": "欢迎嚟到职方第。职方第係清代兵部职方员外郎苏丕文嘅宅第，建于清嘉庆、道光年间。建筑原本有五进，现存四进，过亭、砖石牌坊同题刻係重点睇点，係晚清珠三角广府民居建筑嘅代表。"
         },
         {
           "src": "public/audio/zhifangdi-en.mp3",
-          "label": "英语"
+          "label": "英语",
+          "transcript": "Welcome to Zhifangdi. Zhifangdi was the residence of Su Piwen, a Qing-dynasty Zhifang Vice Director in the Ministry of War, and was built during the Jiaqing and Daoguang reigns. The compound originally had five courtyards, and four remain today. The passage pavilion, the brick-and-stone archway and the inscriptions are the highlights. It is a representative example of late-Qing Guangfu dwellings in the Pearl River Delta."
         }
       ]
     },
@@ -267,15 +273,18 @@
       "audio": [
         {
           "src": "public/audio/nilou-zh.mp3",
-          "label": "普通话"
+          "label": "普通话",
+          "transcript": "欢迎来到泥楼。泥楼始建于明代，是两层三间两廊式民居。墙体以泥、沙等材料夯筑，兼具隔热性能；20世纪初改建的两廊引入拱券和罗马柱等元素，是顺德少见的高层干打垒建筑。"
         },
         {
           "src": "public/audio/nilou-yue.mp3",
-          "label": "粤语"
+          "label": "粤语",
+          "transcript": "欢迎嚟到泥楼。泥楼始建于明代，係两层三间两廊式民居。墙身用泥、沙等材料夯筑，同时有隔热效果；20世纪初改建嘅两廊加入拱券同罗马柱等元素，係顺德少见嘅高层干打垒建筑。"
         },
         {
           "src": "public/audio/nilou-en.mp3",
-          "label": "英语"
+          "label": "英语",
+          "transcript": "Welcome to Nilou. Nilou was first built in the Ming dynasty as a two-storey dwelling with three bays and two side corridors. Its walls are rammed from mud and sand, which also helps insulate the interior. When the corridors were rebuilt in the early 20th century, arches and Roman columns were added, making it a rare tall rammed-earth building in Shunde."
         }
       ]
     },
@@ -343,15 +352,18 @@
       "audio": [
         {
           "src": "public/audio/yiyu-school-zh.mp3",
-          "label": "普通话"
+          "label": "普通话",
+          "transcript": "欢迎来到亦渔遗塾。亦渔遗塾是清代苏氏三兴堂家塾，规模较一般书塾大。建筑由三间两廊式房屋和明字屋组成，隔扇木门雕有花草、瑞兽图案，体现碧江古村的耕读传统。"
         },
         {
           "src": "public/audio/yiyu-school-yue.mp3",
-          "label": "粤语"
+          "label": "粤语",
+          "transcript": "欢迎嚟到亦渔遗塾。亦渔遗塾係清代苏氏三兴堂嘅家塾，规模比一般书塾大。建筑由三间两廊式房屋同明字屋组成，隔扇木门雕有花草、瑞兽图案，体现碧江古村嘅耕读传统。"
         },
         {
           "src": "public/audio/yiyu-school-en.mp3",
-          "label": "英语"
+          "label": "英语",
+          "transcript": "Welcome to Yiyu Heritage School. Yiyu Heritage School was the family school of the Su clan Sanxing Tang in the Qing dynasty and is larger than a typical private school. It consists of a three-bay, two-corridor building and a ming-style house. Its wooden latticed doors are carved with flowers, plants and auspicious animals, reflecting the old village tradition of farming and scholarship."
         }
       ]
     },
@@ -398,15 +410,18 @@
       "audio": [
         {
           "src": "public/audio/garden-zh.mp3",
-          "label": "普通话"
+          "label": "普通话",
+          "transcript": "欢迎来到后花园。后花园保留池水、回廊、亭阁与古树等园林要素，并陈列《碧江二十四咏》铜壁雕。公开资料显示现存园林为修复后的部分范围，具体开放区域以景区现场安排为准。"
         },
         {
           "src": "public/audio/garden-yue.mp3",
-          "label": "粤语"
+          "label": "粤语",
+          "transcript": "欢迎嚟到后花园。后花园保留池水、回廊、亭阁同古树等园林要素，并陈列《碧江二十四咏》铜壁雕。公开资料显示，现存园林係修复后嘅部分范围，具体开放区域以景区现场安排为准。"
         },
         {
           "src": "public/audio/garden-en.mp3",
-          "label": "英语"
+          "label": "英语",
+          "transcript": "Welcome to the Rear Garden. The Rear Garden preserves garden elements such as the pond, covered corridors, pavilions and old trees, and displays the bronze wall reliefs of the Twenty-Four Odes of Bijiang. Public sources indicate that the present garden is a restored portion of a larger layout, and which areas are open depends on the arrangements on site."
         }
       ]
     },
@@ -470,15 +485,18 @@
       "audio": [
         {
           "src": "public/audio/twenty-four-odes-zh.mp3",
-          "label": "普通话"
+          "label": "普通话",
+          "transcript": "欢迎来到二十四咏。《碧江二十四咏》源自清代文人苏鹤描绘碧江人文与自然景观的二十四首诗。景区以诗作为线索制作铜壁雕，呈现旧时碧江的水乡生活与历史景观。"
         },
         {
           "src": "public/audio/twenty-four-odes-yue.mp3",
-          "label": "粤语"
+          "label": "粤语",
+          "transcript": "欢迎嚟到二十四咏。《碧江二十四咏》源自清代文人苏鹤描绘碧江人文同自然景观嘅二十四首诗。景区以诗作为线索制作铜壁雕，呈现旧时碧江嘅水乡生活同历史景观。"
         },
         {
           "src": "public/audio/twenty-four-odes-en.mp3",
-          "label": "英语"
+          "label": "英语",
+          "transcript": "Welcome to the Twenty-Four Odes. The Twenty-Four Odes of Bijiang come from twenty-four poems by the Qing-dynasty scholar Su He, describing the people and scenery of Bijiang. Using the poems as a thread, the scenic area has created bronze wall reliefs that show the water-town life and historic landscapes of old Bijiang."
         }
       ]
     }
