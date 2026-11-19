@@ -5,7 +5,7 @@
     "reviewDate": "2026-11-18",
     "intro": "为到访碧江金楼的亲子与学生准备的一份资料研学手记：先看有出处的建筑与工艺，再按兴趣走一条主题路线，最后带走一张自己完成的研学卡。",
     "scope": "本站是经碧江金楼景区同意的合作研学作品。所有文化结论均标注来源并记录核对日期；票价、开放、通行等动态信息请以现场公告为准。",
-    "audioNotice": "音频为景区原始讲解录音，未逐条审核；年代、人物等细节以页面来源为准。",
+    "audioNotice": "音频为系统语音试听稿：普通话依据已审核讲解词生成，粤语与英语由普通话稿机器翻译生成，发音与用词待景区人工审核；年代、人物等细节以页面来源为准。",
     "photoCredit": "项目素材"
   },
   "sources": [
@@ -114,20 +114,16 @@
       ],
       "audio": [
         {
-          "src": "public/audio/jinlou-1f.mp3",
-          "label": "一层 · 普通话"
+          "src": "public/audio/jinlou-zh.mp3",
+          "label": "普通话"
         },
         {
-          "src": "public/audio/jinlou-1f-baihua.mp3",
-          "label": "一层 · 白话版（语种待确认）"
+          "src": "public/audio/jinlou-yue.mp3",
+          "label": "粤语"
         },
         {
-          "src": "public/audio/jinlou-2f.mp3",
-          "label": "二层 · 普通话"
-        },
-        {
-          "src": "public/audio/jinlou-2f-baihua.mp3",
-          "label": "二层 · 白话版（语种待确认）"
+          "src": "public/audio/jinlou-en.mp3",
+          "label": "英语"
         }
       ]
     },
@@ -194,12 +190,16 @@
       ],
       "audio": [
         {
-          "src": "public/audio/zhifangdi.mp3",
+          "src": "public/audio/zhifangdi-zh.mp3",
           "label": "普通话"
         },
         {
-          "src": "public/audio/zhifangdi-baihua.mp3",
-          "label": "白话版（语种待确认）"
+          "src": "public/audio/zhifangdi-yue.mp3",
+          "label": "粤语"
+        },
+        {
+          "src": "public/audio/zhifangdi-en.mp3",
+          "label": "英语"
         }
       ]
     },
@@ -266,12 +266,16 @@
       ],
       "audio": [
         {
-          "src": "public/audio/nilou.mp3",
+          "src": "public/audio/nilou-zh.mp3",
           "label": "普通话"
         },
         {
-          "src": "public/audio/nilou-baihua.mp3",
-          "label": "白话版（语种待确认）"
+          "src": "public/audio/nilou-yue.mp3",
+          "label": "粤语"
+        },
+        {
+          "src": "public/audio/nilou-en.mp3",
+          "label": "英语"
         }
       ]
     },
@@ -338,12 +342,16 @@
       ],
       "audio": [
         {
-          "src": "public/audio/yiyu.mp3",
+          "src": "public/audio/yiyu-school-zh.mp3",
           "label": "普通话"
         },
         {
-          "src": "public/audio/yiyu-baihua.mp3",
-          "label": "白话版（语种待确认）"
+          "src": "public/audio/yiyu-school-yue.mp3",
+          "label": "粤语"
+        },
+        {
+          "src": "public/audio/yiyu-school-en.mp3",
+          "label": "英语"
         }
       ]
     },
@@ -387,7 +395,20 @@
         "sourceId": "fsxcb-918670"
       },
       "gallery": [],
-      "audio": []
+      "audio": [
+        {
+          "src": "public/audio/garden-zh.mp3",
+          "label": "普通话"
+        },
+        {
+          "src": "public/audio/garden-yue.mp3",
+          "label": "粤语"
+        },
+        {
+          "src": "public/audio/garden-en.mp3",
+          "label": "英语"
+        }
+      ]
     },
     {
       "id": "niannsiyong",
@@ -448,12 +469,16 @@
       ],
       "audio": [
         {
-          "src": "public/audio/niannsiyong.mp3",
+          "src": "public/audio/twenty-four-odes-zh.mp3",
           "label": "普通话"
         },
         {
-          "src": "public/audio/niannsiyong-baihua.mp3",
-          "label": "白话版（语种待确认）"
+          "src": "public/audio/twenty-four-odes-yue.mp3",
+          "label": "粤语"
+        },
+        {
+          "src": "public/audio/twenty-four-odes-en.mp3",
+          "label": "英语"
         }
       ]
     }
