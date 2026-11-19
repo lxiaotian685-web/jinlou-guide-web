@@ -27,7 +27,7 @@
   <main>
     <section class="hero">
       <div class="hero-slides" aria-hidden="true">
-        <img class="hero-slide" src="public/img/hero/hero-1.jpg" alt="">
+        <img class="hero-slide is-active" src="public/img/hero/hero-1.jpg" alt="">
         <img class="hero-slide" src="public/img/hero/hero-2.jpg" alt="">
         <img class="hero-slide" src="public/img/hero/hero-3.jpg" alt="">
         <img class="hero-slide" src="public/img/hero/hero-4.jpg" alt="">
@@ -46,8 +46,15 @@
       </div>
 
       <div class="hero-seal" aria-hidden="true"><span>碧</span><span>江</span></div>
+      <button class="hero-arrow hero-arrow--prev" type="button" aria-label="上一张图片">‹</button>
+      <button class="hero-arrow hero-arrow--next" type="button" aria-label="下一张图片">›</button>
       <div class="wrap hero-foot">
-        <div class="hero-dots" aria-hidden="true"><span class="active"></span><span></span><span></span></div>
+        <div class="hero-dots" role="tablist" aria-label="首页图片">
+          <button class="hero-dot active" type="button" role="tab" aria-label="第 1 张" aria-current="true"></button>
+          <button class="hero-dot" type="button" role="tab" aria-label="第 2 张"></button>
+          <button class="hero-dot" type="button" role="tab" aria-label="第 3 张"></button>
+          <button class="hero-dot" type="button" role="tab" aria-label="第 4 张"></button>
+        </div>
       </div>
     </section>
 
@@ -159,5 +166,6 @@
 
   <script type="module" src="assets/js/app.js"></script>
   <script type="module" src="assets/js/motion.js"></script>
+  <script type="module" src="assets/js/home.js"></script>
 </body>
 </html>
