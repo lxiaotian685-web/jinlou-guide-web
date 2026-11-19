@@ -171,7 +171,7 @@ function initMap(data) {
       legendRoute.hidden = false;
       legendRoute.innerHTML = route.points.map((point) => {
         const spot = spotForSite(point.siteNumber);
-        const content = `<span>${point.number}</span>${escapeHtml(point.name)}`;
+        const content = `<span class="map-legend-dot">${point.number}</span>${escapeHtml(point.name)}`;
         return `<li>${spot ? `<a href="#${escapeHtml(spot.id)}">${content}</a>` : `<span class="is-missing">${content}</span>`}</li>`;
       }).join("");
     }
