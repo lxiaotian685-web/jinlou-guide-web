@@ -165,8 +165,8 @@ async function searchWeb(apiKey: string, question: string): Promise<WebResult[]>
         authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        query: Array.from(`碧江金楼 ${question}`).slice(0, 128).join(""),
-        count: 3,
+        query: Array.from(`碧江金楼 顺德 ${question}`).slice(0, 128).join(""),
+        count: 5,
         need_content: true,
       }),
       signal: controller.signal,
@@ -187,13 +187,11 @@ async function searchWeb(apiKey: string, question: string): Promise<WebResult[]>
       return [];
     }
     if (url.protocol !== "https:" || url.username || url.password) return [];
+    const title = safeText(item?.title || url.hostname, 160);
     const content = safeText(item?.content || item?.summary || item?.snippet || "", 1200);
     if (!content) return [];
-    return [{
-      title: safeText(item?.title || url.hostname, 160),
-      url: url.href,
-      content,
-    }];
+    if (!`${title} ${content}`.includes("碧江") && !`${title} ${content}`.includes("金楼")) return [];
+    return [{ title, url: url.href, content }];
   }).slice(0, 3);
 }
 
