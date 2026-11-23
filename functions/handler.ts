@@ -316,6 +316,7 @@ export async function handler(request: Request): Promise<Response> {
     return json({ ok: false, error: "service_not_configured" }, 503);
   }
 
+  let stage = "search";
   try {
     let webResults: WebResult[] = [];
     if (retrieval.general) {
@@ -325,6 +326,7 @@ export async function handler(request: Request): Promise<Response> {
         webResults = [];
       }
     }
+    stage = "chat";
     const result = await askDeepSeek(apiKey, question, retrieval.matches, retrieval.general, webResults);
     const payload = {
       ok: true,
@@ -344,6 +346,14 @@ export async function handler(request: Request): Promise<Response> {
     answerCache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
     return json(payload);
   } catch (error) {
+    const diagnosticStatus = (error as Error & { status?: number })?.status;
+    const code = (error as Error & { code?: string })?.code;
+    console.error("qa_provider_error", JSON.stringify({
+      stage,
+      status: diagnosticStatus || 0,
+      code: code || "",
+      name: (error as Error)?.name || "unknown",
+    }));
     if ((error as Error)?.name === "AbortError") {
       return json({ ok: false, error: "provider_timeout" }, 504);
     }
