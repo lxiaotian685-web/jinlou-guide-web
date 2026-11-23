@@ -109,13 +109,23 @@ function aiRefusalCard(payload) {
 
 function aiAnswerCard(payload, question) {
   const sourceIds = Array.isArray(payload.sourceIds) ? payload.sourceIds.filter((id) => typeof id === "string") : [];
+  const webSources = Array.isArray(payload.webSources)
+    ? payload.webSources.filter((item) => item && typeof item.url === "string" && item.url.startsWith("https://"))
+    : [];
   const meta = sourceIds.length
     ? sourceMetaFor(data, sourceIds)
     : payload.insufficient || payload.general ? "" : "<span>出处：本站已登记资料</span>";
-  const label = payload.general ? "AI 补充" : payload.insufficient ? "资料不足" : "AI 整理";
+  const webMeta = webSources.length ? `
+      <div class="fact-meta">
+        <span>联网检索：</span>
+        ${webSources.map((item) => `<a class="source-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title || item.url)}</a>`).join("、")}
+      </div>` : "";
+  const label = payload.general ? (webSources.length ? "AI 联网补充" : "AI 补充") : payload.insufficient ? "资料不足" : "AI 整理";
   const badge = payload.general || payload.insufficient ? "note" : "ok";
   const note = payload.general
-    ? "本地资料库未命中，以上为 DeepSeek 通用回答；景区事实与实时信息请以出处、现场展签或官方公告为准。"
+    ? webSources.length
+      ? "本地资料库未命中，以上参考了 DeepSeek 联网检索结果；网页内容未人工复核，景区事实与实时信息请以官方公告为准。"
+      : "本地资料库未命中，以上为 DeepSeek 通用回答；景区事实与实时信息请以出处、现场展签或官方公告为准。"
     : "AI 只依据本站已登记资料整理；事实与细节仍以出处和现场展签为准。";
   return `
     <div class="card answer-card">
@@ -126,6 +136,7 @@ function aiAnswerCard(payload, question) {
       <h3>${escapeHtml(question)}</h3>
       <p class="answer-text">${escapeHtml(payload.answer)}</p>
       ${meta ? `<div class="fact-meta">${meta}</div>` : ""}
+      ${webMeta}
       <p class="onsite-note">${note}</p>
     </div>
   `;
@@ -174,7 +185,7 @@ async function askQuestion(rawQuestion) {
 
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 20_000);
+    const timer = setTimeout(() => controller.abort(), 25_000);
     let response;
     try {
       response = await fetch("/functions/v1/app", {

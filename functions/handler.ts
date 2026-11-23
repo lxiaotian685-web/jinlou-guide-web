@@ -1,6 +1,7 @@
 import { knowledge } from "./knowledge.ts";
 
 const DEEPSEEK_ENDPOINT = "https://api.deepseek.com/chat/completions";
+const DEEPSEEK_SEARCH_ENDPOINT = "https://api.deepseek.com/v1/tools/search";
 const DEEPSEEK_MODEL = "deepseek-chat";
 const MAX_QUESTION_CHARS = 300;
 const RATE_WINDOW_MS = 60_000;
@@ -9,6 +10,7 @@ const CACHE_TTL_MS = 10 * 60_000;
 const CACHE_MAX = 100;
 
 type KnowledgeAnswer = (typeof knowledge.answers)[number];
+type WebResult = { title: string; url: string; content: string };
 
 type Runtime = {
   Deno?: { env?: { get(name: string): string | undefined } };
@@ -27,9 +29,12 @@ const BASE_PROMPT = [
   "不要输出[资料1]这类编号。",
 ].join("\n");
 
-function buildSystemPrompt(general: boolean): string {
+function buildSystemPrompt(general: boolean, hasWebResults = false): string {
   if (general) {
-    return `${BASE_PROMPT}\n本地知识库没有与问题直接对应的条目。你可以用通用知识回答，但必须说明这是通用回答；涉及景区实时信息时明确说无法核实，建议查看现场公告或“碧江金楼”微信公众号；不要编造具体数值、官方结论或景区事实。若确实无法回答，在回答最前输出 [INSUFFICIENT_EVIDENCE]。`;
+    const webRule = hasWebResults
+      ? "\n已提供联网检索结果。可以引用网页信息，但必须说明“据网页信息”，并注明网页内容未人工复核、可能不是实时或官方信息；不得把网页说法冒充景区官方结论。"
+      : "";
+    return `${BASE_PROMPT}\n本地知识库没有与问题直接对应的条目。你可以用通用知识回答，但必须说明这是通用回答；涉及景区实时信息时明确说无法核实，建议查看现场公告或“碧江金楼”微信公众号；不要编造具体数值、官方结论或景区事实。若确实无法回答，在回答最前输出 [INSUFFICIENT_EVIDENCE]。${webRule}`;
   }
   return `${BASE_PROMPT}\n优先依据提供的已登记资料回答；资料不足时在回答最前输出 [INSUFFICIENT_EVIDENCE]，说明缺少什么，不要猜测。`;
 }
@@ -136,17 +141,69 @@ function isRateLimited(key: string): boolean {
   return false;
 }
 
+async function searchWeb(apiKey: string, question: string): Promise<WebResult[]> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 6_000);
+  let response: Response;
+  try {
+    response = await fetch(DEEPSEEK_SEARCH_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        query: Array.from(`碧江金楼 ${question}`).slice(0, 128).join(""),
+        count: 3,
+        need_content: true,
+      }),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!response.ok) throw new Error("search request failed");
+
+  const data = await response.json() as { results?: Array<{ title?: unknown; url?: unknown; content?: unknown; summary?: unknown; snippet?: unknown }> };
+  if (!Array.isArray(data?.results)) return [];
+
+  return data.results.flatMap((item) => {
+    let url: URL;
+    try {
+      url = new URL(String(item?.url || ""));
+    } catch {
+      return [];
+    }
+    if (url.protocol !== "https:" || url.username || url.password) return [];
+    const content = String(item?.content || item?.summary || item?.snippet || "").trim().slice(0, 1200);
+    if (!content) return [];
+    return [{
+      title: String(item?.title || url.hostname).slice(0, 160),
+      url: url.href,
+      content,
+    }];
+  }).slice(0, 3);
+}
+
 async function askDeepSeek(
   apiKey: string,
   question: string,
   matches: KnowledgeAnswer[],
   general: boolean,
+  webResults: WebResult[] = [],
 ): Promise<{ answer: string; insufficient: boolean }> {
   const context = matches
     .map((match) => `[资料] ${match.question}\n${match.answer}`)
     .join("\n\n");
+  const webContext = webResults
+    .map((result, index) => `[网页${index + 1}] ${result.title}\n${result.url}\n${result.content}`)
+    .join("\n\n");
   const userContent = general
-    ? `本地知识库没有与问题直接对应的条目。\n问题：${question}`
+    ? [
+      "本地知识库没有与问题直接对应的条目。",
+      webContext ? `联网检索结果（未人工复核）：\n${webContext}` : "",
+      `问题：${question}`,
+    ].filter(Boolean).join("\n\n")
     : `资料：\n${context}\n\n问题：${question}`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15_000);
@@ -165,7 +222,7 @@ async function askDeepSeek(
         messages: [
           {
             role: "system",
-            content: `${buildSystemPrompt(general)}\n当前日期：${new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Shanghai" })}。`,
+            content: `${buildSystemPrompt(general, webResults.length > 0)}\n当前日期：${new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Shanghai" })}。`,
           },
           { role: "user", content: userContent },
         ],
@@ -260,13 +317,22 @@ export async function handler(request: Request): Promise<Response> {
   }
 
   try {
-    const result = await askDeepSeek(apiKey, question, retrieval.matches, retrieval.general);
+    let webResults: WebResult[] = [];
+    if (retrieval.general) {
+      try {
+        webResults = await searchWeb(apiKey, question);
+      } catch {
+        webResults = [];
+      }
+    }
+    const result = await askDeepSeek(apiKey, question, retrieval.matches, retrieval.general, webResults);
     const payload = {
       ok: true,
       mode: "answer",
       answer: result.answer,
       insufficient: result.insufficient,
       sourceIds: result.insufficient || retrieval.general ? [] : sourceIdsFor(retrieval.matches),
+      webSources: webResults.map(({ title, url }) => ({ title, url })),
       model: DEEPSEEK_MODEL,
       weak: retrieval.weak,
       general: retrieval.general,
