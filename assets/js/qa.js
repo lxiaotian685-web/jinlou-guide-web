@@ -49,6 +49,9 @@ function sourceMetaFor(data, ids) {
 function refusalCard(type) {
   const item = data.refusals[type];
   const label = type === "dynamic" ? "动态信息 / 拒答" : type === "official" ? "资料边界 / 拒答" : "NO MATCH / 拒答";
+  const boundaryNote = type === "dynamic" || type === "official"
+    ? `<p class="onsite-note">该问题在调用 DeepSeek 前按本站资料边界直接拒答，未消耗 AI 请求。</p>`
+    : "";
   const extra = type === "unknown" ? `
     <div class="scope-mini">
       当前可查：
@@ -64,6 +67,7 @@ function refusalCard(type) {
       <h3>${escapeHtml(item.title)}</h3>
       <p class="answer-text">${escapeHtml(item.text)}</p>
       ${extra}
+      ${boundaryNote}
     </div>
   `;
 }
@@ -86,7 +90,7 @@ function answerCard(answer) {
 }
 
 function renderRefusal(type, query, notice = "") {
-  const prefix = query ? `<p class="meta-line" style="margin-bottom:8px">检索“${escapeHtml(query)}”</p>` : "";
+  const prefix = query ? `<p class="meta-line" style="margin-bottom:8px">${type === "unknown" ? "本地检索" : "本地边界检查"}：“${escapeHtml(query)}”</p>` : "";
   const noticeHtml = notice ? `<p class="meta-line" style="margin-bottom:8px">${escapeHtml(notice)}</p>` : "";
   resultEl.innerHTML = noticeHtml + prefix + refusalCard(type);
   window.MotionReveal?.refresh(resultEl);
