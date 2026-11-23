@@ -141,6 +141,18 @@ function isRateLimited(key: string): boolean {
   return false;
 }
 
+function safeText(value: unknown, maxChars: number): string {
+  return Array.from(String(value ?? ""))
+    .filter((char) => {
+      const code = char.codePointAt(0) ?? 0;
+      if (code >= 0xD800 && code <= 0xDFFF) return false;
+      return code === 9 || code === 10 || code >= 0x20;
+    })
+    .slice(0, maxChars)
+    .join("")
+    .trim();
+}
+
 async function searchWeb(apiKey: string, question: string): Promise<WebResult[]> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 6_000);
@@ -175,10 +187,10 @@ async function searchWeb(apiKey: string, question: string): Promise<WebResult[]>
       return [];
     }
     if (url.protocol !== "https:" || url.username || url.password) return [];
-    const content = String(item?.content || item?.summary || item?.snippet || "").trim().slice(0, 1200);
+    const content = safeText(item?.content || item?.summary || item?.snippet || "", 1200);
     if (!content) return [];
     return [{
-      title: String(item?.title || url.hostname).slice(0, 160),
+      title: safeText(item?.title || url.hostname, 160),
       url: url.href,
       content,
     }];
@@ -316,7 +328,6 @@ export async function handler(request: Request): Promise<Response> {
     return json({ ok: false, error: "service_not_configured" }, 503);
   }
 
-  let stage = "search";
   try {
     let webResults: WebResult[] = [];
     if (retrieval.general) {
@@ -326,7 +337,6 @@ export async function handler(request: Request): Promise<Response> {
         webResults = [];
       }
     }
-    stage = "chat";
     const result = await askDeepSeek(apiKey, question, retrieval.matches, retrieval.general, webResults);
     const payload = {
       ok: true,
@@ -346,14 +356,6 @@ export async function handler(request: Request): Promise<Response> {
     answerCache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
     return json(payload);
   } catch (error) {
-    const diagnosticStatus = (error as Error & { status?: number })?.status;
-    const code = (error as Error & { code?: string })?.code;
-    console.error("qa_provider_error", JSON.stringify({
-      stage,
-      status: diagnosticStatus || 0,
-      code: code || "",
-      name: (error as Error)?.name || "unknown",
-    }));
     if ((error as Error)?.name === "AbortError") {
       return json({ ok: false, error: "provider_timeout" }, 504);
     }
