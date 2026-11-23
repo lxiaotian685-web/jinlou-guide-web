@@ -50,7 +50,7 @@ function refusalCard(type) {
   const item = data.refusals[type];
   const label = type === "dynamic" ? "动态信息 / 拒答" : type === "official" ? "资料边界 / 拒答" : "NO MATCH / 拒答";
   const boundaryNote = type === "dynamic" || type === "official"
-    ? `<p class="onsite-note">该问题在调用 DeepSeek 前按本站资料边界直接拒答，未消耗 AI 请求。</p>`
+    ? `<p class="onsite-note">DeepSeek 暂不可用，按本站资料边界在本地拒答。</p>`
     : "";
   const extra = type === "unknown" ? `
     <div class="scope-mini">
@@ -111,18 +111,38 @@ function aiAnswerCard(payload, question) {
   const sourceIds = Array.isArray(payload.sourceIds) ? payload.sourceIds.filter((id) => typeof id === "string") : [];
   const meta = sourceIds.length
     ? sourceMetaFor(data, sourceIds)
-    : payload.insufficient ? "" : "<span>出处：本站已登记资料</span>";
-  const label = payload.insufficient ? "资料不足" : "AI 整理";
+    : payload.insufficient || payload.general ? "" : "<span>出处：本站已登记资料</span>";
+  const label = payload.general ? "AI 补充" : payload.insufficient ? "资料不足" : "AI 整理";
+  const badge = payload.general || payload.insufficient ? "note" : "ok";
+  const note = payload.general
+    ? "本地资料库未命中，以上为 DeepSeek 通用回答；景区事实与实时信息请以出处、现场展签或官方公告为准。"
+    : "AI 只依据本站已登记资料整理；事实与细节仍以出处和现场展签为准。";
   return `
     <div class="card answer-card">
       <div class="answer-kicker">
         <span class="eyebrow">ANSWER / DEEPSEEK</span>
-        <span class="badge ${payload.insufficient ? "note" : "ok"}">${label}</span>
+        <span class="badge ${badge}">${label}</span>
       </div>
       <h3>${escapeHtml(question)}</h3>
       <p class="answer-text">${escapeHtml(payload.answer)}</p>
       ${meta ? `<div class="fact-meta">${meta}</div>` : ""}
-      <p class="onsite-note">AI 只依据本站已登记资料整理；事实与细节仍以出处和现场展签为准。</p>
+      <p class="onsite-note">${note}</p>
+    </div>
+  `;
+}
+
+function localAnswerCard(payload, question) {
+  const sourceIds = Array.isArray(payload.sourceIds) ? payload.sourceIds.filter((id) => typeof id === "string") : [];
+  return `
+    <div class="card answer-card">
+      <div class="answer-kicker">
+        <span class="eyebrow">ANSWER / 本地资料</span>
+        <span class="badge ok">已核对</span>
+      </div>
+      <h3>${escapeHtml(question)}</h3>
+      <p class="answer-text">${escapeHtml(payload.answer)}</p>
+      ${sourceIds.length ? `<div class="fact-meta">${sourceMetaFor(data, sourceIds)}</div>` : ""}
+      <p class="onsite-note">本地知识库命中，未调用 DeepSeek。</p>
     </div>
   `;
 }
@@ -144,14 +164,6 @@ async function askQuestion(rawQuestion) {
     return;
   }
 
-  if (hasKeyword(query, data.refusals.dynamic.keywords)) {
-    renderRefusal("dynamic", raw);
-    return;
-  }
-  if (hasKeyword(query, data.refusals.official.keywords)) {
-    renderRefusal("official", raw);
-    return;
-  }
   if (asking) return;
 
   asking = true;
@@ -184,6 +196,9 @@ async function askQuestion(rawQuestion) {
     }
     if (payload.mode === "refusal") {
       resultEl.innerHTML = aiRefusalCard(payload);
+    } else if (payload.mode === "local") {
+      if (typeof payload.answer !== "string" || !payload.answer.trim()) throw new Error("empty_answer");
+      resultEl.innerHTML = localAnswerCard(payload, raw);
     } else {
       if (typeof payload.answer !== "string" || !payload.answer.trim()) throw new Error("empty_answer");
       resultEl.innerHTML = aiAnswerCard(payload, raw);

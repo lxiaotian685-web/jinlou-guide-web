@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>溯源问答 · 金漆木雕手记</title>
-  <meta name="description" content="碧江金楼资料问答：DeepSeek 依据已登记资料整理答案，展示答案出处；资料不足或信息会变动时明确说明。">
+  <meta name="description" content="碧江金楼资料问答：优先检索本站已登记资料；没有对应条目时由 DeepSeek 继续回答，并说明哪些信息无法核实。">
   <meta name="theme-color" content="#f2ede4">
   <link rel="icon" href="public/img/logo.png" type="image/png">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261119-9">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261119-11">
 </head>
 <body>
   <header class="site-header">
@@ -31,7 +31,7 @@
         <div class="page-head-main">
           <div>
             <h1>先找答案，再看出处</h1>
-            <p class="lede">输入问题，DeepSeek 只依据本站已登记资料整理答案，并给出可核对出处；资料不足或涉及会变动的信息时会明确说明，不编造。</p>
+            <p class="lede">输入问题，先检索本站已登记资料；没有对应条目时，由 DeepSeek 继续回答，并说明哪些信息无法核实。</p>
           </div>
           <div class="seal" aria-hidden="true"><span>问</span><span>答</span></div>
         </div>
@@ -43,7 +43,7 @@
       <section class="section card ticks" aria-labelledby="search-title">
         <div class="section-head" style="margin-top:0">
           <h2 id="search-title">输入问题</h2>
-          <p>DeepSeek 整理 · 标注出处</p>
+          <p>本地资料优先 · 未命中交 DeepSeek</p>
         </div>
         <form class="search-box" id="qa-form" role="search">
           <div class="search-row">
@@ -52,7 +52,7 @@
             <button class="btn" type="submit">提问</button>
           </div>
         </form>
-        <p class="meta-line" style="margin-top:8px">AI 只依据本站已登记资料整理，事实以出处和现场展签为准。票价、开放时间、天气、交通等动态信息会在本地直接拒答，不会调用 DeepSeek。</p>
+        <p class="meta-line" style="margin-top:8px">本地资料命中时优先引用资料；未命中时由 DeepSeek 继续回答。票价、天气等实时信息会说明无法核实，事实仍以出处和现场公告为准。</p>
         <div class="chips" id="chips" aria-label="常见问题"></div>
         <div id="qa-result" aria-live="polite" style="margin-top:16px"></div>
       </section>
@@ -85,7 +85,7 @@
     </div>
   </footer>
 
-  <script type="module" src="assets/js/motion.js?v=20261119-9"></script>
-  <script type="module" src="assets/js/qa.js?v=20261119-9"></script>
+  <script type="module" src="assets/js/motion.js?v=20261119-11"></script>
+  <script type="module" src="assets/js/qa.js?v=20261119-11"></script>
 </body>
 </html>
